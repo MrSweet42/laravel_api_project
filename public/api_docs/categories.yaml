@@ -1,0 +1,205 @@
+paths:
+  categories:
+    get:
+      tags:
+        - category
+      summary: Получить список категорий
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessGetCategories'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    post:
+      tags:
+        - category
+      summary: Создать новую категорию
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCategory'
+      responses:
+        '201':
+          $ref: '#/components/responses/SuccessCreateCategory'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+  category:
+    get:
+      tags:
+        - category
+      summary: Получить информацию о категории
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessGetCategory'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    put:
+      tags:
+        - category
+      summary: Заменить категорию
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      requestBody:
+        $ref: '#/components/requestBodies/ReplaceCategory'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessReplaceCategory'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    patch:
+      tags:
+        - category
+      summary: Частично изменить категорию
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCategory'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessUpdateCategory'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    delete:
+      tags:
+        - category
+      summary: Удалить категорию
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessDeleteCategory'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+components:
+  schemas:
+    Category:
+      $ref: './spec.yaml#/components/schemas/Category'
+    RequestBodyCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          example: sport cars
+        is_active:
+          type: boolean
+    RequestBodyCreateCategory:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyCategory'
+      required:
+        - name
+        - is_active
+    RequestBodyReplaceCategory:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyCategory'
+      required:
+        - name
+        - is_active
+    RequestBodyUpdateCategory:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyCategory'
+    ResponseAllCategories:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+      required:
+        - data
+    ResponseCategory:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Category'
+      required:
+        - data
+    ResponseDeleteCategory:
+      type: object
+      properties:
+        data:
+          type: object
+          nullable: true
+          example: null
+      required:
+        - data
+  parameters:
+    categoryId:
+      name: categoryId
+      in: path
+      description: ID категории
+      required: true
+      schema:
+        type: integer
+        format: int64
+  requestBodies:
+    CreateCategory:
+      description: Данные для создания категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyCreateCategory'
+      required: true
+    ReplaceCategory:
+      description: Данные для замены категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyReplaceCategory'
+      required: true
+    UpdateCategory:
+      description: Данные для частичного изменения категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyUpdateCategory'
+      required: true
+  responses:
+    SuccessGetCategories:
+      description: Успешный запрос!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseAllCategories'
+    SuccessCreateCategory:
+      description: Успех! Категория создана
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseCategory'
+    SuccessGetCategory:
+      description: Успешный запрос!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseCategory'
+    SuccessReplaceCategory:
+      description: Успех! Категория заменена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseCategory'
+    SuccessUpdateCategory:
+      description: Успех! Категория частично изменена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseCategory'
+    SuccessDeleteCategory:
+      description: Успех! Категория удалена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDeleteCategory'
