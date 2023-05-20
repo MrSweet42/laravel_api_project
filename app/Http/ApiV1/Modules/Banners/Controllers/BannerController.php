@@ -33,7 +33,7 @@ class BannerController
     {
         $banner = $action->execute($request->validated());
         if (!$banner) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new BannerResource($banner);
     }
@@ -44,10 +44,10 @@ class BannerController
         try {
             $banner = $action->execute($id);
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$banner) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new BannerResource($banner);
     }
@@ -59,10 +59,10 @@ class BannerController
         try {
             $banner = $action->execute($id, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$banner) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new BannerResource($banner);
     }
@@ -74,10 +74,10 @@ class BannerController
         try {
             $banner = $action->execute($id, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$banner) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new BannerResource($banner);
     }
@@ -88,7 +88,7 @@ class BannerController
         try {
             $action->execute($id);
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         return response()->json(['data' => null]);
     }

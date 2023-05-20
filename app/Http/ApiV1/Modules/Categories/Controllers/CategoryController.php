@@ -42,7 +42,7 @@ class CategoryController
     {
         $category = $action->execute($request->validated());
         if (!$category) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new CategoryResource($category);
     }
@@ -53,10 +53,10 @@ class CategoryController
         try {
             $category = $action->execute($id);
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$category) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 40);
         }
         return new CategoryResource($category);
     }
@@ -68,10 +68,10 @@ class CategoryController
         try {
             $category = $action->execute($id, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$category) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new CategoryResource($category);
     }
@@ -83,10 +83,10 @@ class CategoryController
         try {
             $category = $action->execute($id, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$category) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new CategoryResource($category);
     }
@@ -97,7 +97,7 @@ class CategoryController
         try {
             $action->execute($id);
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         return response()->json(['data' => null]);
     }
@@ -108,7 +108,7 @@ class CategoryController
         try {
             $banners = $action->execute($categoryId);
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         return new AllBannersResource($banners);
     }
@@ -120,10 +120,10 @@ class CategoryController
         try {
             $banners = $action->execute($categoryId, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$banners) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new AllBannersResource($banners);
     }
@@ -135,10 +135,10 @@ class CategoryController
         try {
             $banners = $action->execute($categoryId, $request->validated());
         } catch (NotFoundException $exception) {
-            return response()->json(['data' => null, 'errors' => $exception->getMessage()]);
+            return response()->json(['data' => null, 'errors' => $exception->getMessage()], 404);
         }
         if (!$banners) {
-            return response()->json(['data' => 'Bad request']);
+            return response()->json(['data' => 'Bad request'], 400);
         }
         return new AllBannersResource($banners);
     }
