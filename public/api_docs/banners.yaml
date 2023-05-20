@@ -1,0 +1,206 @@
+paths:
+  banners:
+    get:
+      tags:
+        - banner
+      summary: Получить список баннеров
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessGetBanners'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    post:
+      tags:
+        - banner
+      summary: Создать новый баннер
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBanner'
+      responses:
+        '201':
+          $ref: '#/components/responses/SuccessCreateBanner'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+  banner:
+    get:
+      tags:
+        - banner
+      summary: Получить информацию о баннере
+      parameters:
+        - $ref: '#/components/parameters/bannerId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessGetBanner'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundBannerError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    put:
+      tags:
+        - banner
+      summary: Заменить баннер
+      parameters:
+        - $ref: '#/components/parameters/bannerId'
+      requestBody:
+        $ref: '#/components/requestBodies/ReplaceBanner'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessReplaceBanner'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundBannerError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    patch:
+      tags:
+        - banner
+      summary: Частично изменить баннер
+      parameters:
+        - $ref: '#/components/parameters/bannerId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateBanner'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessUpdateBanner'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundBannerError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    delete:
+      tags:
+        - banner
+      summary: Удалить баннер
+      parameters:
+        - $ref: '#/components/parameters/bannerId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessDeleteBanner'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundBannerError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+components:
+  schemas:
+    Banner:
+      $ref: './spec.yaml#/components/schemas/Banner'
+    RequestBodyBanner:
+      type: object
+      properties:
+        name:
+          type: string
+          example: wheels image
+        image_path:
+          type: string
+          example: storage/images/banners/1.png
+    RequestBodyCreateBanner:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyBanner'
+      required:
+        - name
+        - image_path
+    RequestBodyReplaceBanner:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyBanner'
+      required:
+        - name
+        - image_path
+    RequestBodyUpdateBanner:
+      allOf:
+        - $ref: '#/components/schemas/RequestBodyBanner'
+    ResponseAllBanners:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Banner'
+      required:
+        - data
+    ResponseBanner:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Banner'
+      required:
+        - data
+    ResponseDeleteBanner:
+      type: object
+      properties:
+        data:
+          type: object
+          nullable: true
+          example: null
+      required:
+        - data
+  parameters:
+    bannerId:
+      name: bannerId
+      in: path
+      description: ID баннера
+      required: true
+      schema:
+        type: integer
+        format: int64
+  requestBodies:
+    CreateBanner:
+      description: Данные для создания баннера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyCreateBanner'
+      required: true
+    ReplaceBanner:
+      description: Данные для замены баннера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyReplaceBanner'
+      required: true
+    UpdateBanner:
+      description: Данные для частичного изменения баннера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestBodyUpdateBanner'
+      required: true
+  responses:
+    SuccessGetBanners:
+      description: Успешный запрос!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseAllBanners'
+    SuccessCreateBanner:
+      description: Успех! Баннер создан
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseBanner'
+    SuccessGetBanner:
+      description: Успешный запрос!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseBanner'
+    SuccessReplaceBanner:
+      description: Успех! Баннер заменен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseBanner'
+    SuccessUpdateBanner:
+      description: Успех! Баннер частично изменен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseBanner'
+    SuccessDeleteBanner:
+      description: Успех! Баннер удален
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDeleteBanner'

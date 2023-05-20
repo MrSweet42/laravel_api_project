@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Категории и баннеры
+  description: API спецификация для управления категориями и баннерами
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8000/api/v1
+tags:
+  - name: category
+    description: Everything about categories
+  - name: banner
+    description: Everything about banners
+  - name: categories and banners
+    description: Everything about relationship
+paths:
+  /categories:
+    $ref: "categories.yaml#/paths/categories"
+  /categories/{categoryId}:
+    $ref: "categories.yaml#/paths/category"
+  /banners:
+    $ref: "banners.yaml#/paths/banners"
+  /banners/{bannerId}:
+    $ref: "banners.yaml#/paths/banner"
+  /categories/{categoryId}/banners:
+    $ref: "categories_and_banners.yaml#/paths/bannersByCategoryId"
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: sport cars
+        is_active:
+          type: boolean
+    Banner:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: wheels image
+        image_path:
+          type: string
+          example: storage/images/banners/1.png

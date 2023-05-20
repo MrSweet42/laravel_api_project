@@ -1,0 +1,118 @@
+paths:
+  bannersByCategoryId:
+    get:
+      tags:
+        - categories and banners
+      summary: Получить список баннеров прикрепленных к определенной категории
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessGetBannersByCategoryId'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryOrBannersError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    post:
+      tags:
+        - categories and banners
+      summary: Привязать один или несколько баннеров к определенной категории
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      requestBody:
+        $ref: '#/components/requestBodies/AttachBannersToCategory'
+      responses:
+        '201':
+          $ref: '#/components/responses/SuccessAttachBannersToCategory'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryOrBannersError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+    delete:
+      tags:
+        - categories and banners
+      summary: Отвязать один или несколько баннеров от определенной категории
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      requestBody:
+        $ref: '#/components/requestBodies/DetachBannersFromCategory'
+      responses:
+        '201':
+          $ref: '#/components/responses/SuccessDetachBannersFromCategory'
+        '400':
+          $ref: './errors.yaml#/components/responses/BadRequestError'
+        '404':
+          $ref: './errors.yaml#/components/responses/NotFoundCategoryOrBannersError'
+        '500':
+          $ref: './errors.yaml#/components/responses/ServerError'
+
+components:
+  schemas:
+    Banner:
+      $ref: './spec.yaml#/components/schemas/Banner'
+    ResponseAllBannersByCategoryId:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Banner'
+      required:
+        - data
+    RequestAttachBannersToCategory:
+      type: object
+      properties:
+        banner_ids:
+          type: string
+          example: 1, 2, 3
+    RequestDetachBannersFromCategory:
+      type: object
+      properties:
+        banner_ids:
+          type: string
+          example: 1, 2, 3
+  parameters:
+    categoryId:
+      name: categoryId
+      in: path
+      description: ID категории
+      required: true
+      schema:
+        type: integer
+        format: int64
+  requestBodies:
+    AttachBannersToCategory:
+      description: Идентификаторы баннеров, которые нужно привязать к категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestAttachBannersToCategory'
+      required: true
+    DetachBannersFromCategory:
+      description: Идентификаторы баннеров, которые нужно отвязать от категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestAttachBannersToCategory'
+      required: true
+  responses:
+    SuccessGetBannersByCategoryId:
+      description: Успешный запрос!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseAllBannersByCategoryId'
+    SuccessAttachBannersToCategory:
+      description: Успех! Список баннеров прикреплен к категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseAllBannersByCategoryId'
+    SuccessDetachBannersFromCategory:
+      description: Успех! Список баннеров откреплен от категории
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseAllBannersByCategoryId'
